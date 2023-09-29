@@ -21,6 +21,7 @@
             - InternetGatewayDevice.LANDevice.*.Hosts.Host.*.HostName
             - InternetGatewayDevice.LANDevice.*.Hosts.Host.*.IPAddress
             - InternetGatewayDevice.LANDevice.*.Hosts.Host.*.MACAddress
+            - InternetGatewayDevice.LANDevice.*.Hosts.Host.*
     - label: "'Serial number'"
       parameter: DeviceID.SerialNumber
     - label: "'Product class'"
@@ -43,6 +44,18 @@
       parameter: InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase
     - label: "'PPPoe Username'"
       parameter: InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Username
+- label: "'2.4 GHz Clients'"
+  parameter: InternetGatewayDevice.WiFi.AccessPoint.1.AssociatedDevice
+  type: "'parameter-table'"
+  childParameters:
+    - label: "'MAC Adress'"
+    - parameter: MACAddress
+- label: "'5 GHz Clients'"
+  parameter: InternetGatewayDevice.WiFi.AccessPoint.2.AssociatedDevice
+  type: "'parameter-table'"
+  childParameters:
+    - label: "'MAC Adress'"
+    - parameter: MACAddress
 - label: "'LAN hosts'"
   parameter: InternetGatewayDevice.LANDevice.1.Hosts.Host
   type: "'parameter-table'"
