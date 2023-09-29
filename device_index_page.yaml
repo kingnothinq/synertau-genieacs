@@ -1,0 +1,26 @@
+- label: "'Serial number'"
+  parameter: DeviceID.SerialNumber
+  type: "'device-link'"
+  components:
+    - type: "'parameter'"
+- label: "'Product class'"
+  parameter: DeviceID.ProductClass
+- label: "'Software version'"
+  parameter: InternetGatewayDevice.DeviceInfo.SoftwareVersion
+- label: "'IP'"
+  parameter: InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANIPConnection.1.ExternalIPAddress
+- label: "'SSID'"
+  parameter: InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID
+- element: "'span.inform'"
+  label: "'Last inform'"
+  parameter: DATE_STRING(Events.Inform)
+  type: "'container'"
+  components:
+    - type: "'parameter'"
+    - chart: "'online'"
+      type: "'overview-dot'"
+- label: "'Tags'"
+  parameter: Tags
+  type: "'tags'"
+  unsortable: true
+  writable: false
