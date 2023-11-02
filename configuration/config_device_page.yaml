@@ -44,6 +44,12 @@
       parameter: InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase
     - label: "'PPPoe Username'"
       parameter: InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Username
+    - label: "'User 1'"
+      parameter: InternetGatewayDevice.User.1.Username
+    - label: "'User 2'"
+      parameter: InternetGatewayDevice.User.2.Username
+    - label: "'User 3'"
+      parameter: InternetGatewayDevice.User.0.Username
 - label: "'2.4 GHz Clients'"
   parameter: InternetGatewayDevice.WiFi.AccessPoint.1.AssociatedDevice
   type: "'parameter-table'"

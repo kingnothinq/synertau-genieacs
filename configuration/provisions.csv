@@ -1,0 +1,91 @@
+"Name","Script"
+"00_bootstrap","// Clear cached data model to force a refresh
+const now = Date.now();
+clear(""Device"", now);
+clear(""InternetGatewayDevice"", now);
+
+// Tag recently added devices
+declare(""Tags.New"", null, {value: true});
+
+log(""00_bootstrap"");"
+"01_bootstrap","// Tag recently added devices
+declare(""Tags.New"", null, {value: true});
+
+log(""01_bootstrap"");"
+"10_pss","// Upload PSS
+declare(""Downloads.[FileType:2 Web Content]"", {path: 1}, {path: 1}); 
+declare(""Downloads.[FileType:2 Web Content].FileName"", {value: 1}, {value: ""pss-dhcp.tar.bz2""}); 
+declare(""Downloads.[FileType:2 Web Content].Download"", {value: 1}, {value: Date.now()}); 
+
+// Tag devices with PSS
+declare(""Tags.PSS"", null, {value: true});
+
+
+log(""10_pss"");"
+"20_upgrade","// Update firmware
+declare(""Downloads.[FileType:1 Firmware Upgrade Image]"", {path: 1}, {path: 1}); 
+declare(""Downloads.[FileType:1 Firmware Upgrade Image].FileName"", {value: 1}, {value: ""autoupdate""}); 
+declare(""Downloads.[FileType:1 Firmware Upgrade Image].Download"", {value: 1}, {value: Date.now()}); 
+
+log(""20_upgrade"");"
+"21_bootstrap","// Clear cached data model to force a refresh
+const now = Date.now();
+clear(""Device"", now);
+clear(""InternetGatewayDevice"", now);
+
+// Tag updated devices
+declare(""Tags.Updated"", null, {value: true});
+
+log(""21_bootstrap"");"
+"30_config","//Initial setup 
+const time = Date.now();
+const mac = declare(""DeviceID.SerialNumber"",{value:1}).value[0]; 
+const wkey = mac; 
+const ssid = ""Homenet2"" + mac.substring(9); 
+const ssid5 = ""Homenet"" + mac.substring(9); 
+const bam = ""EAPAuthentication""; 
+const enc = ""AESEncryption""; 
+
+declare(""InternetGatewayDevice.ManagementServer.PeriodicInformTime"",{value:time},{value:bam}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.*.*"", {path: time}); 
+
+//Refresh the node... 
+
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.BasicAuthenticationMode"",{value:time},{value:bam}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAAuthenticationMode"",{value:time},{value:bam}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAEncryptionModes"",{value:time},{value:enc}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iAuthenticationMode"",{value:time},{value:""PSKAuthentication""}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iEncryptionModes"",{value:time},{value:enc}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID"",{value:time},{value:ssid}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase"",{value:time},{value:wkey}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.BasicAuthenticationMode"",{value:time},{value:bam}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAAuthenticationMode"",{value:time},{value:bam}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAEncryptionModes"",{value:time},{value:enc}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iAuthenticationMode"",{value:time},{value:""PSKAuthentication""}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iEncryptionModes"",{value:time},{value:enc}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.SSID"",{value:time},{value:ssid5}); 
+declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.KeyPassphrase"",{value:time},{value:wkey}); 
+
+log(""30_config"");
+
+// Remove tags
+declare(""Tags.New"", null, {value: false});
+declare(""Tags.PSS"", null, {value: false});
+declare(""Tags.Updated"", null, {value: false});
+
+// Tag ready devices
+declare(""Tags.Ready"", null, {value: true});
+
+log(""30_config ready"");
+
+// Reboot device
+declare(""Reboot"", null, {value: Date.now() - (300 * 1000)});"
+"02_bootstrap","// Clear cached data model to force a refresh
+const now = Date.now();
+clear(""Device"", now);
+clear(""InternetGatewayDevice"", now);
+
+// Tag recently added devices
+declare(""Tags.New"", null, {value: true});
+
+log(""02_bootstrap"");"

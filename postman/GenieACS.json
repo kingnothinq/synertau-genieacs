@@ -1,0 +1,503 @@
+{
+	"info": {
+		"_postman_id": "3aba816a-6752-4d89-a100-c6bbdb4e500d",
+		"name": "GenieACS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25204839"
+	},
+	"item": [
+		{
+			"name": "Check",
+			"item": [
+				{
+					"name": "GET Presets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{URL}}:{{PORT}}/presets",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{PORT}}",
+							"path": [
+								"presets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Provisions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{URL}}:{{PORT}}/provisions",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{PORT}}",
+							"path": [
+								"provisions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create",
+			"item": [
+				{
+					"name": "Provisions",
+					"item": [
+						{
+							"name": "00_bootstrap",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// Clear cached data model to force a refresh\r\nconst now = Date.now();\r\nclear(\"Device\", now);\r\nclear(\"InternetGatewayDevice\", now);\r\n\r\n// Tag recently added devices\r\ndeclare(\"Tags.New\", null, {value: true});\r\n\r\nlog(\"00_bootstrap\");",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/provisions/00_bootstrap",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"provisions",
+										"00_bootstrap"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "01_bootstrap",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// Tag recently added devices\r\ndeclare(\"Tags.New\", null, {value: true});\r\n\r\nlog(\"01_bootstrap\");",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/provisions/01_bootstrap",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"provisions",
+										"01_bootstrap"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "02_bootstrap",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// Clear cached data model to force a refresh\r\nconst now = Date.now();\r\nclear(\"Device\", now);\r\nclear(\"InternetGatewayDevice\", now);\r\n\r\n// Tag recently added devices\r\ndeclare(\"Tags.New\", null, {value: true});\r\n\r\nlog(\"02_bootstrap\");",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/provisions/02_bootstrap",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"provisions",
+										"02_bootstrap"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "10_pss",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// Upload PSS\r\ndeclare(\"Downloads.[FileType:2 Web Content]\", {path: 1}, {path: 1}); \r\ndeclare(\"Downloads.[FileType:2 Web Content].FileName\", {value: 1}, {value: \"pss-dhcp.tar.bz2\"}); \r\ndeclare(\"Downloads.[FileType:2 Web Content].Download\", {value: 1}, {value: Date.now()}); \r\n\r\n// Tag devices with PSS\r\ndeclare(\"Tags.PSS\", null, {value: true});\r\n\r\n\r\nlog(\"10_pss\");",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/provisions/10_pss",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"provisions",
+										"10_pss"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "20_upgrade",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// Update firmware\r\ndeclare(\"Downloads.[FileType:1 Firmware Upgrade Image]\", {path: 1}, {path: 1}); \r\ndeclare(\"Downloads.[FileType:1 Firmware Upgrade Image].FileName\", {value: 1}, {value: \"autoupdate\"}); \r\ndeclare(\"Downloads.[FileType:1 Firmware Upgrade Image].Download\", {value: 1}, {value: Date.now()}); \r\n\r\nlog(\"20_upgrade\");",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/provisions/20_upgrade",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"provisions",
+										"20_upgrade"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "21_bootstrap",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// Clear cached data model to force a refresh\r\nconst now = Date.now();\r\nclear(\"Device\", now);\r\nclear(\"InternetGatewayDevice\", now);\r\n\r\n// Tag updated devices\r\ndeclare(\"Tags.Updated\", null, {value: true});\r\n\r\nlog(\"21_bootstrap\");",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/provisions/21_bootstrap",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"provisions",
+										"21_bootstrap"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "30_config",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "//Initial setup \r\nconst time = Date.now();\r\nconst mac = declare(\"DeviceID.SerialNumber\",{value:1}).value[0]; \r\nconst wkey = mac; \r\nconst ssid = \"Homenet2\" + mac.substring(9); \r\nconst ssid5 = \"Homenet\" + mac.substring(9); \r\nconst bam = \"EAPAuthentication\"; \r\nconst enc = \"AESEncryption\"; \r\n\r\ndeclare(\"InternetGatewayDevice.ManagementServer.PeriodicInformTime\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.*.*\", {path: time}); \r\n\r\n//Refresh the node... \r\n\r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.BasicAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iAuthenticationMode\",{value:time},{value:\"PSKAuthentication\"}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID\",{value:time},{value:ssid}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase\",{value:time},{value:wkey}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.BasicAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iAuthenticationMode\",{value:time},{value:\"PSKAuthentication\"}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.SSID\",{value:time},{value:ssid5}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.KeyPassphrase\",{value:time},{value:wkey}); \r\n\r\nlog(\"30_config\");\r\n\r\n// Remove tags\r\ndeclare(\"Tags.New\", null, {value: false});\r\ndeclare(\"Tags.PSS\", null, {value: false});\r\ndeclare(\"Tags.Updated\", null, {value: false});\r\n\r\n// Tag ready devices\r\ndeclare(\"Tags.Ready\", null, {value: true});\r\n\r\nlog(\"30_config ready\");\r\n\r\n// Reboot device\r\ndeclare(\"Reboot\", null, {value: Date.now() - (300 * 1000)});",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/provisions/30_config",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"provisions",
+										"30_config"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Presets",
+					"item": [
+						{
+							"name": "00_bootstrap",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"channel\": \"wive\",\r\n        \"weight\": 0,\r\n        \"events\": {\r\n            \"0 BOOTSTRAP\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NULL AND Tags.New IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"00_bootstrap\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/presets/00_bootstrap",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"presets",
+										"00_bootstrap"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "01_bootstrap",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"channel\": \"wive\",\r\n        \"weight\": 0,\r\n        \"events\": {\r\n            \"1 BOOT\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NULL AND Tags.New IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"01_bootstrap\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/presets/01_bootstrap",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"presets",
+										"01_bootstrap"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "02_bootstrap",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"_id\": \"02_bootstrap\",\r\n        \"channel\": \"wive\",\r\n        \"weight\": 0,\r\n        \"events\": {\r\n            \"6 CONNECTION REQUEST\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NULL AND Tags.New IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"02_bootstrap\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/presets/02_bootstrap",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"presets",
+										"02_bootstrap"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "10_pss",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"channel\": \"wive\",\r\n        \"weight\": 10,\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NULL AND Tags.New IS NOT NULL AND Tags.PSS IS NULL\",\r\n        \"events\": {\r\n            \"1 BOOT\": true\r\n        },\r\n        \"schedule\": \"\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"10_pss\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/presets/10_pss",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"presets",
+										"10_pss"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "11_reset",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"channel\": \"wive\",\r\n        \"weight\": 11,\r\n        \"events\": {\r\n            \"7 TRANSFER COMPLETE\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NULL AND Tags.New IS NOT NULL AND Tags.PSS IS NOT NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"reset\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/presets/11_reset",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"presets",
+										"11_reset"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "20_upgrade",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"channel\": \"wive\",\r\n        \"weight\": 20,\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NULL AND Tags.New IS NOT NULL AND Tags.PSS IS NOT NULL AND Tags.Updated IS NULL\",\r\n        \"events\": {\r\n            \"1 BOOT\": true\r\n        },\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"20_upgrade\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/presets/20_upgrade",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"presets",
+										"20_upgrade"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "21_bootstrap",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"channel\": \"wive\",\r\n        \"weight\": 21,\r\n        \"events\": {\r\n            \"7 TRANSFER COMPLETE\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NULL AND Tags.New IS NOT NULL AND Tags.PSS IS NOT NULL AND Tags.Updated IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"21_bootstrap\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/presets/21_bootstrap",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"presets",
+										"21_bootstrap"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "30_config",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"channel\": \"wive\",\r\n        \"weight\": 30,\r\n        \"events\": {\r\n            \"1 BOOT\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NULL AND Tags.New IS NOT NULL AND Tags.PSS IS NOT NULL AND Tags.Updated IS NOT NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"30_config\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/presets/30_config",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"presets",
+										"30_config"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

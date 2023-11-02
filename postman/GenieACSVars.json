@@ -1,0 +1,21 @@
+{
+	"id": "e33880c5-d75a-43e8-9204-5eff0febe98e",
+	"name": "GenieACSVars",
+	"values": [
+		{
+			"key": "URL",
+			"value": "localhost",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "PORT",
+			"value": "7557",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2023-11-02T00:10:13.029Z",
+	"_postman_exported_using": "Postman/10.19.2"
+}
