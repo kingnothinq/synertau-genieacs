@@ -22,6 +22,8 @@
             - InternetGatewayDevice.LANDevice.*.Hosts.Host.*.IPAddress
             - InternetGatewayDevice.LANDevice.*.Hosts.Host.*.MACAddress
             - InternetGatewayDevice.LANDevice.*.Hosts.Host.*
+            - InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.AssociatedDevice
+            - InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.AssociatedDevice
     - label: "'Serial number'"
       parameter: DeviceID.SerialNumber
     - label: "'Product class'"
@@ -51,17 +53,21 @@
     - label: "'User 3'"
       parameter: InternetGatewayDevice.User.0.Username
 - label: "'2.4 GHz Clients'"
-  parameter: InternetGatewayDevice.WiFi.AccessPoint.1.AssociatedDevice
+  parameter: InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.AssociatedDevice
   type: "'parameter-table'"
   childParameters:
+    - label: "'IP Adress'"
+    - parameter: AssociatedDeviceIPAddress
     - label: "'MAC Adress'"
-    - parameter: MACAddress
+    - parameter: AssociatedDeviceMACAddress
 - label: "'5 GHz Clients'"
-  parameter: InternetGatewayDevice.WiFi.AccessPoint.2.AssociatedDevice
+  parameter: InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.AssociatedDevice
   type: "'parameter-table'"
   childParameters:
+    - label: "'IP Adress'"
+    - parameter: AssociatedDeviceIPAddress
     - label: "'MAC Adress'"
-    - parameter: MACAddress
+    - parameter: AssociatedDeviceMACAddress
 - label: "'LAN hosts'"
   parameter: InternetGatewayDevice.LANDevice.1.Hosts.Host
   type: "'parameter-table'"
