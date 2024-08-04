@@ -3,9 +3,9 @@ version: "3"
 services:
 # Dockerfile here: https://github.com/docker-library/mongo/blob/6932ac255d29759af9a74c6931faeb02de0fe53e/4.0/Dockerfile
     mongo:
-        image: mongo:4.4
+        image: mongo
         restart: always
-        container_name: "mongo"
+        container_name: "mongo-genieacs"
         environment:
 #            - MONGO_INITDB_ROOT_USERNAME=userchange
 #            - MONGO_INITDB_ROOT_PASSWORD=passwordchange
@@ -23,7 +23,7 @@ services:
     genieacs:
         depends_on:
             - 'mongo'
-        image: drumsergio/genieacs:1.2.9
+        image: drumsergio/genieacs:1.2.13
         restart: always
         container_name: "genieacs"
         environment:
@@ -47,13 +47,13 @@ services:
 
 ### THIS SERVICE IS JUST FOR TESTING PURPOSES ###
 # Dockerfile here: https://hub.docker.com/r/drumsergio/genieacs-sim/dockerfile
-    genieacs-sim:
-        depends_on:
-            - 'genieacs'
-        image: drumsergio/genieacs-sim
-        container_name: "genieacs-sim"
-        networks:
-            - genieacs_network
+#    genieacs-sim:
+#        depends_on:
+#            - 'genieacs'
+#        image: drumsergio/genieacs-sim
+#        container_name: "genieacs-sim"
+#        networks:
+#            - genieacs_network
 
 volumes:
     data_db:
