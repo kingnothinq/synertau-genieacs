@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3aba816a-6752-4d89-a100-c6bbdb4e500d",
+		"_postman_id": "dd402e0a-a35d-41eb-aa7e-0c30a03987f8",
 		"name": "GenieACS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25204839"
@@ -81,7 +81,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "// Clear cached data model to force a refresh\r\nconst now = Date.now();\r\nclear(\"Device\", now);\r\nclear(\"InternetGatewayDevice\", now);\r\n\r\n// Tag recently added devices\r\ndeclare(\"Tags.00_New_device\", null, {value: true});\r\n\r\nlog(\"00_bootstrap\");",
+									"raw": "// Clear cached data model to force a refresh\r\n\r\nlog(\"00_bootstrap_start\");\r\n\r\nclear(\"Device\", Date.now());\r\nclear(\"InternetGatewayDevice\", Date.now());\r\n\r\n// Tag recently added devices\r\ndeclare(\"Tags.00\", null, {value: true});\r\n\r\nlog(\"00_bootstrap_stop\");",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -104,13 +104,42 @@
 							"response": []
 						},
 						{
+							"name": "01_periodic",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// Change Periodic connect interval\r\n\r\nlog(\"01_periodic_start\");\r\n\r\ndeclare(\"InternetGatewayDevice.ManagementServer.PeriodicInformInterval\",{value:Date.now()},{value:60}); \r\n\r\n// Tag\r\ndeclare(\"Tags.01\", null, {value: true});\r\n\r\nlog(\"01_periodic_stop\");",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/provisions/01_periodic",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"provisions",
+										"01_periodic"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "10_pss",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "// Upload PSS\r\ndeclare(\"Downloads.[FileType:2 Web Content]\", {path: 1}, {path: 1}); \r\ndeclare(\"Downloads.[FileType:2 Web Content].FileName\", {value: 1}, {value: \"pss_settings.tar.bz2\"}); \r\ndeclare(\"Downloads.[FileType:2 Web Content].Download\", {value: 1}, {value: Date.now()}); \r\n\r\n// Tag devices with uploaded PSS\r\ndeclare(\"Tags.10_PPS_Uploaded\", null, {value: true});\r\n\r\nlog(\"10_pss\");",
+									"raw": "// Upload PSS File to CPE\r\n\r\nlog(\"10_pss_start\");\r\n\r\ndeclare(\"Downloads.[FileType:2 Web Content]\", {path: 1}, {path: 1}); \r\ndeclare(\"Downloads.[FileType:2 Web Content].FileName\", {value: 1}, {value: \"pss_settings.tar.bz2\"}); \r\ndeclare(\"Downloads.[FileType:2 Web Content].Download\", {value: 1}, {value: Date.now()}); \r\n\r\n// Tag\r\ndeclare(\"Tags.10\", null, {value: true});\r\n\r\nlog(\"10_pss_stop\");",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -133,13 +162,13 @@
 							"response": []
 						},
 						{
-							"name": "20_reset",
+							"name": "20_bootstrap",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "// Reset device\r\ndeclare(\"FactoryReset\", null, {value: Date.now()});\r\n\r\n// Tag reset devices\r\ndeclare(\"Tags.20_Reset_sent\", null, {value: true});\r\n\r\nlog(\"20_reset\");",
+									"raw": "// Clear cached data model to force a refresh\r\n\r\nlog(\"20_bootstrap_start\");\r\n\r\nclear(\"Device\", Date.now());\r\nclear(\"InternetGatewayDevice\", Date.now());\r\n\r\n// Tag recently added devices\r\ndeclare(\"Tags.20\", null, {value: true});\r\n\r\nlog(\"20_bootstrap_stop\");",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -147,7 +176,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/provisions/20_reset",
+									"raw": "http://{{URL}}:{{PORT}}/provisions/20_bootstrap",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -155,20 +184,20 @@
 									"port": "{{PORT}}",
 									"path": [
 										"provisions",
-										"20_reset"
+										"20_bootstrap"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "21_bootstrap",
+							"name": "21_reset",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "// Clear cached data model to force a refresh\r\nconst now = Date.now();\r\nclear(\"Device\", now);\r\nclear(\"InternetGatewayDevice\", now);\r\n\r\n// Tag updated devices\r\ndeclare(\"Tags.21_PSS_Implemented\", null, {value: true});\r\n\r\nlog(\"21_bootstrap\");",
+									"raw": "// Reset device\r\n\r\nlog(\"21_reset_start\");\r\n\r\ndeclare(\"FactoryReset\", null, {value: Date.now()});\r\n\r\n// Tag\r\ndeclare(\"Tags.21\", null, {value: true});\r\n\r\nlog(\"21_reset_stop\");",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -176,7 +205,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/provisions/21_bootstrap",
+									"raw": "http://{{URL}}:{{PORT}}/provisions/21_reset",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -184,7 +213,36 @@
 									"port": "{{PORT}}",
 									"path": [
 										"provisions",
-										"21_bootstrap"
+										"21_reset"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "22_periodic",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// Change Periodic connect interval\r\n\r\nlog(\"22_periodic_start\");\r\n\r\ndeclare(\"InternetGatewayDevice.ManagementServer.PeriodicInformInterval\",{value:Date.now()},{value:180}); \r\n\r\n// Tag\r\ndeclare(\"Tags.22\", null, {value: true});\r\n\r\nlog(\"22_periodic_stop\");",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/provisions/22_periodic",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"provisions",
+										"22_periodic"
 									]
 								}
 							},
@@ -197,7 +255,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "// Update firmware\r\ndeclare(\"Downloads.[FileType:1 Firmware Upgrade Image]\", {path: 1}, {path: 1}); \r\ndeclare(\"Downloads.[FileType:1 Firmware Upgrade Image].FileName\", {value: 1}, {value: \"autoupdate\"}); \r\ndeclare(\"Downloads.[FileType:1 Firmware Upgrade Image].Download\", {value: 1}, {value: Date.now()}); \r\n\r\n// Tag devices with uploaded Upgrade file\r\ndeclare(\"Tags.30_Autoupdate_sent\", null, {value: true});\r\n\r\nlog(\"30_upgrade\");",
+									"raw": "// Upgrade firmware\r\n\r\nlog(\"30_upgrade_start\");\r\n\r\ndeclare(\"Downloads.[FileType:1 Firmware Upgrade Image]\", {path: 1}, {path: 1}); \r\ndeclare(\"Downloads.[FileType:1 Firmware Upgrade Image].FileName\", {value: 1}, {value: \"autoupdate\"}); \r\ndeclare(\"Downloads.[FileType:1 Firmware Upgrade Image].Download\", {value: 1}, {value: Date.now()}); \r\n\r\n// Tag\r\ndeclare(\"Tags.30\", null, {value: true});\r\n\r\nlog(\"30_upgrade_stop\");",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -220,13 +278,13 @@
 							"response": []
 						},
 						{
-							"name": "32_bootstrap",
+							"name": "31_bootstrap",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "// Clear cached data model to force a refresh\r\nconst now = Date.now();\r\nclear(\"Device\", now);\r\nclear(\"InternetGatewayDevice\", now);\r\n\r\n// Tag updated devices\r\ndeclare(\"Tags.32_Upgraded\", null, {value: true});\r\n\r\nlog(\"32_bootstrap\");",
+									"raw": "// Clear cached data model to force a refresh\r\n\r\nlog(\"31_bootstrap_start\");\r\n\r\nclear(\"Device\", Date.now());\r\nclear(\"InternetGatewayDevice\", Date.now());\r\n\r\n// Tag recently added devices\r\ndeclare(\"Tags.31\", null, {value: true});\r\n\r\nlog(\"31_bootstrap_stop\");",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -234,7 +292,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/provisions/32_bootstrap",
+									"raw": "http://{{URL}}:{{PORT}}/provisions/31_bootstrap",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -242,7 +300,7 @@
 									"port": "{{PORT}}",
 									"path": [
 										"provisions",
-										"32_bootstrap"
+										"31_bootstrap"
 									]
 								}
 							},
@@ -255,7 +313,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "//Initial setup \r\nconst time = Date.now();\r\nconst mac = declare(\"DeviceID.SerialNumber\",{value:1}).value[0]; \r\nconst wkey = mac; \r\nconst ssid = \"Homenet2\" + mac.substring(9); \r\nconst ssid5 = \"Homenet\" + mac.substring(9); \r\nconst bam = \"EAPAuthentication\"; \r\nconst enc = \"AESEncryption\"; \r\n\r\ndeclare(\"InternetGatewayDevice.ManagementServer.PeriodicInformTime\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.*.*\", {path: time}); \r\n\r\n//Refresh the node \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.BasicAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iAuthenticationMode\",{value:time},{value:\"PSKAuthentication\"}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID\",{value:time},{value:ssid}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase\",{value:time},{value:wkey}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.BasicAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iAuthenticationMode\",{value:time},{value:\"PSKAuthentication\"}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.SSID\",{value:time},{value:ssid5}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.KeyPassphrase\",{value:time},{value:wkey}); \r\n\r\n// Reboot device\r\ndeclare(\"Reboot\", null, {value: Date.now() - (300 * 1000)});\r\n\r\n// Tag configured devices\r\ndeclare(\"Tags.40_Configured\", null, {value: true});\r\n\r\nlog(\"40_config\");",
+									"raw": "// Configure CPE\r\n\r\nlog(\"40_config_start\");\r\n\r\nconst time = Date.now();\r\nconst mac = declare(\"DeviceID.SerialNumber\",{value:1}).value[0]; \r\n\r\n// Wi-Fi\r\nconst auth = \"EAPAuthentication\"; \r\nconst encr = \"AESEncryption\"; \r\nconst encr_2 = \"AES\"; \r\nconst mode = \"WPA3-Personal-Transition\";\r\nconst isp = \"Synertau\";\r\nconst psk = mac.replace(/:/g, '');\r\n\r\nconfigure_wlan_24();\r\nconfigure_wlan_5();\r\n\r\n// VPN\r\nconfigure_vpn();\r\n\r\n\r\nfunction configure_wlan_24() {\r\n  const ssid = isp + \"_24_\" + mac.substring(9).replace(/:/g, ''); \r\n  \r\n  //declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iAuthenticationMode\",{value:time},{value:auth});\r\n  declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAAuthenticationMode\",{value:time},{value:auth}); \r\n  //declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iEncryptionModes\",{value:time},{value:encr}); \r\n  declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAEncryptionModes\",{value:time},{value:encr});\r\n  declare(\"InternetGatewayDevice.WiFi.AccessPoint.1.Security.EncryptionMode\",{value:time},{value:encr_2});\r\n  //declare(\"InternetGatewayDevice.WiFi.SSID.1.SSID\",{value:time},{value:ssid});\r\n  declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID\",{value:time},{value:ssid});\r\n  declare(\"InternetGatewayDevice.WiFi.AccessPoint.1.Security.ModeEnabled\",{value:time},{value:mode});\r\n  declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase\",{value:time},{value:psk});\r\n}\r\n\r\nfunction configure_wlan_5() {\r\n  const ssid = isp + \"_5_\" + mac.substring(9).replace(/:/g, '');\r\n\r\n  //declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iAuthenticationMode\",{value:time},{value:auth}); \r\n  declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAAuthenticationMode\",{value:time},{value:auth}); \r\n  //declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iEncryptionModes\",{value:time},{value:encr}); \r\n  declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAEncryptionModes\",{value:time},{value:encr}); \r\n  //declare(\"InternetGatewayDevice.WiFi.SSID.2.SSID\",{value:time},{value:ssid});\r\n  declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.SSID\",{value:time},{value:ssid});\r\n  declare(\"InternetGatewayDevice.WiFi.AccessPoint.2.Security.ModeEnabled\",{value:time},{value:mode});\r\n  declare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.KeyPassphrase\",{value:time},{value:psk});\r\n}\r\n\r\nfunction configure_vpn() {\r\n  const vpn = \"AUTO\";\r\n  const user = \"vpn_user\";\r\n  const pswd = \"vpn_password\";\r\n\r\n  declare(\"InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Enable\",{value:time},{value:1});\r\n  declare(\"InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.PPPAuthenticationProtocol\",{value:time},{value:vpn});\r\n  declare(\"InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Username\",{value:time},{value:user});\r\n  declare(\"InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Password\",{value:time},{value:pswd});\r\n}\r\n\r\n// Reboot device\r\ndeclare(\"Reboot\", null, {value:time});\r\n\r\n// Tag configured devices\r\ndeclare(\"Tags.40\", null, {value: true});\r\n\r\nlog(\"40_config_stop\");",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -284,7 +342,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "// Clear cached data model to force a refresh\r\nconst now = Date.now();\r\nclear(\"Device\", now);\r\nclear(\"InternetGatewayDevice\", now);\r\n\r\n// Remove tags\r\ndeclare(\"Tags.00_New_device\", null, {value: false});\r\ndeclare(\"Tags.10_PPS_Uploaded\", null, {value: false});\r\ndeclare(\"Tags.20_Reset_sent\", null, {value: false});\r\ndeclare(\"Tags.21_PSS_Implemented\", null, {value: false});\r\ndeclare(\"Tags.30_Autoupdate_sent\", null, {value: false});\r\ndeclare(\"Tags.32_Upgraded\", null, {value: false});\r\ndeclare(\"Tags.40_Configured\", null, {value: false});\r\n\r\n// Tag ready devices\r\ndeclare(\"Tags.Ready\", null, {value: true});",
+									"raw": "// Clear cached data model to force a refresh\r\n\r\nlog(\"41_bootstrap_start\");\r\n\r\n// Periodic (Default)\r\ndeclare(\"InternetGatewayDevice.ManagementServer.PeriodicInformInterval\",{value:Date.now()},{value:3600});\r\n\r\nclear(\"Device\", Date.now());\r\nclear(\"InternetGatewayDevice\", Date.now());\r\n\r\n// Remove Tags\r\ndeclare(\"Tags.00\", null, {value: false});\r\ndeclare(\"Tags.01\", null, {value: false});\r\ndeclare(\"Tags.10\", null, {value: false});\r\ndeclare(\"Tags.20\", null, {value: false});\r\ndeclare(\"Tags.21\", null, {value: false});\r\ndeclare(\"Tags.22\", null, {value: false});\r\ndeclare(\"Tags.30\", null, {value: false});\r\ndeclare(\"Tags.31\", null, {value: false});\r\ndeclare(\"Tags.40\", null, {value: false});\r\n\r\n// Add Tag\r\ndeclare(\"Tags.Ready\", null, {value: true});\r\n\r\nlog(\"41_bootstrap_stop\");",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -307,13 +365,13 @@
 							"response": []
 						},
 						{
-							"name": "50_re_config",
+							"name": "50_reconfig",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "//Setup every 1 day \r\nconst time = Date.now();\r\nconst mac = declare(\"DeviceID.SerialNumber\",{value:1}).value[0]; \r\nconst wkey = mac; \r\nconst ssid = \"Homenet2\" + mac.substring(9); \r\nconst ssid5 = \"Homenet\" + mac.substring(9); \r\nconst bam = \"EAPAuthentication\"; \r\nconst enc = \"AESEncryption\"; \r\n\r\ndeclare(\"InternetGatewayDevice.ManagementServer.PeriodicInformTime\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.*.*\", {path: time}); \r\n\r\n//Refresh the node \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.BasicAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iAuthenticationMode\",{value:time},{value:\"PSKAuthentication\"}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID\",{value:time},{value:ssid}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase\",{value:time},{value:wkey}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.BasicAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAAuthenticationMode\",{value:time},{value:bam}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iAuthenticationMode\",{value:time},{value:\"PSKAuthentication\"}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iEncryptionModes\",{value:time},{value:enc}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.SSID\",{value:time},{value:ssid5}); \r\ndeclare(\"InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.KeyPassphrase\",{value:time},{value:wkey}); \r\n\r\nlog(\"50_config\");",
+									"raw": "// Configure CPE\r\n\r\nlog(\"50_reconfig_start\");\r\n\r\nconst time = Date.now();\r\nconst mac = declare(\"DeviceID.SerialNumber\",{value:1}).value[0]; \r\n\r\n\r\n// VPN\r\nconfigure_vpn();\r\n\r\n\r\nfunction configure_vpn() {\r\n  const vpn = \"AUTO\";\r\n  const user = \"vpn_user\";\r\n  const pswd = \"vpn_password\";\r\n\r\n  declare(\"InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Enable\",{value:time},{value:1});\r\n  declare(\"InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.PPPAuthenticationProtocol\",{value:time},{value:vpn});\r\n  declare(\"InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Username\",{value:time},{value:user});\r\n  declare(\"InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Password\",{value:time},{value:pswd});\r\n}\r\n\r\nlog(\"51_reconfig_stop\");",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -321,7 +379,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/provisions/50_re_config",
+									"raw": "http://{{URL}}:{{PORT}}/provisions/50_reconfig",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -329,20 +387,20 @@
 									"port": "{{PORT}}",
 									"path": [
 										"provisions",
-										"50_re_config"
+										"50_reconfig"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "52_bootstrap",
+							"name": "51_bootstrap",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "// Clear cached data model to force a refresh\r\nconst now = Date.now();\r\nclear(\"Device\", now);\r\nclear(\"InternetGatewayDevice\", now);",
+									"raw": "// Clear cached data model to force a refresh\r\n\r\nlog(\"51_bootstrap_start\");\r\n\r\nclear(\"Device\", Date.now());\r\nclear(\"InternetGatewayDevice\", Date.now());\r\n\r\nlog(\"51_bootstrap_stop\");",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -350,7 +408,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/provisions/52_bootstrap",
+									"raw": "http://{{URL}}:{{PORT}}/provisions/51_bootstrap",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -358,7 +416,7 @@
 									"port": "{{PORT}}",
 									"path": [
 										"provisions",
-										"52_bootstrap"
+										"51_bootstrap"
 									]
 								}
 							},
@@ -376,7 +434,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 0,\r\n        \"events\": {\r\n            \"0 BOOTSTRAP\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NULL AND Tags.10_PPS_Uploaded IS NULL AND Tags.20_Reset_sent IS NULL AND Tags.21_PSS_Implemented IS NULL AND Tags.30_Autoupdate_sent IS NULL AND Tags.32_Upgraded IS NULL AND Tags.40_Configured IS NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"00_bootstrap\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"00_bootstrap\",\r\n    \"channel\": \"wive_new\",\r\n    \"weight\": 0,\r\n    \"events\": {\r\n        \"0 BOOTSTRAP\": true\r\n    },\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00 IS NULL AND Tags.01 IS NULL AND Tags.10 IS NULL AND Tags.20 IS NULL AND Tags.21 IS NULL AND Tags.22 IS NULL AND Tags.30 IS NULL AND Tags.31 IS NULL AND Tags.40 IS NULL AND Tags.Ready IS NULL\",\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"00_bootstrap\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -399,13 +457,42 @@
 							"response": []
 						},
 						{
+							"name": "01_periodic",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"_id\": \"01_periodic\",\r\n    \"channel\": \"wive_new\",\r\n    \"weight\": 1,\r\n    \"events\": {\r\n        \"0 BOOTSTRAP\": true\r\n    },\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00 IS NOT NULL AND Tags.01 IS NULL AND Tags.10 IS NULL AND Tags.20 IS NULL AND Tags.21 IS NULL AND Tags.22 IS NULL AND Tags.30 IS NULL AND Tags.31 IS NULL AND Tags.40 IS NULL AND Tags.Ready IS NULL\",\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"01_periodic\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{URL}}:{{PORT}}/presets/01_periodic",
+									"protocol": "http",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"presets",
+										"01_periodic"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "10_pss",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 10,\r\n        \"events\": {\r\n            \"0 BOOTSTRAP\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NOT NULL AND Tags.10_PPS_Uploaded IS NULL AND Tags.20_Reset_sent IS NULL AND Tags.21_PSS_Implemented IS NULL AND Tags.30_Autoupdate_sent IS NULL AND Tags.32_Upgraded IS NULL AND Tags.40_Configured IS NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"10_pss\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"10_pss\",\r\n    \"channel\": \"wive_new\",\r\n    \"weight\": 10,\r\n    \"events\": {\r\n        \"0 BOOTSTRAP\": true\r\n    },\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00 IS NOT NULL AND Tags.01 IS NOT NULL AND Tags.10 IS NULL AND Tags.20 IS NULL AND Tags.21 IS NULL AND Tags.22 IS NULL AND Tags.30 IS NULL AND Tags.31 IS NULL AND Tags.40 IS NULL AND Tags.Ready IS NULL\",\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"10_pss\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -428,13 +515,13 @@
 							"response": []
 						},
 						{
-							"name": "11_pss",
+							"name": "20_bootstrap",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 10,\r\n        \"events\": {\r\n            \"1 BOOT\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NOT NULL AND Tags.10_PPS_Uploaded IS NULL AND Tags.20_Reset_sent IS NULL AND Tags.21_PSS_Implemented IS NULL AND Tags.30_Autoupdate_sent IS NULL AND Tags.32_Upgraded IS NULL AND Tags.40_Configured IS NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"10_pss\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"20_bootstrap\",\r\n    \"channel\": \"wive_new\",\r\n    \"weight\": 20,\r\n    \"events\": {\r\n        \"7 TRANSFER COMPLETE\": true\r\n    },\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00 IS NOT NULL AND Tags.01 IS NOT NULL AND Tags.10 IS NOT NULL AND Tags.20 IS NULL AND Tags.21 IS NULL AND Tags.22 IS NULL AND Tags.30 IS NULL AND Tags.31 IS NULL AND Tags.40 IS NULL AND Tags.Ready IS NULL\",\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"20_bootstrap\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -442,7 +529,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/presets/11_pss",
+									"raw": "http://{{URL}}:{{PORT}}/presets/20_bootstrap",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -450,20 +537,20 @@
 									"port": "{{PORT}}",
 									"path": [
 										"presets",
-										"11_pss"
+										"20_bootstrap"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "20_reset",
+							"name": "21_reset",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 20,\r\n        \"events\": {\r\n            \"7 TRANSFER COMPLETE\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NOT NULL AND Tags.10_PPS_Uploaded IS NOT NULL AND Tags.20_Reset_sent IS NULL AND Tags.21_PSS_Implemented IS NULL AND Tags.30_Autoupdate_sent IS NULL AND Tags.32_Upgraded IS NULL AND Tags.40_Configured IS NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"20_reset\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"21_reset\",\r\n    \"channel\": \"wive_new\",\r\n    \"weight\": 21,\r\n    \"events\": {\r\n        \"2 PERIODIC\": true\r\n    },\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00 IS NOT NULL AND Tags.01 IS NOT NULL AND Tags.10 IS NOT NULL AND Tags.20 IS NOT NULL AND Tags.21 IS NULL AND Tags.22 IS NULL AND Tags.30 IS NULL AND Tags.31 IS NULL AND Tags.40 IS NULL AND Tags.Ready IS NULL\",\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"21_reset\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -471,7 +558,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/presets/20_reset",
+									"raw": "http://{{URL}}:{{PORT}}/presets/21_reset",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -479,20 +566,20 @@
 									"port": "{{PORT}}",
 									"path": [
 										"presets",
-										"20_reset"
+										"21_reset"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "21_bootstrap",
+							"name": "22_periodic",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 21,\r\n        \"events\": {\r\n            \"0 BOOTSTRAP\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NOT NULL AND Tags.10_PPS_Uploaded IS NOT NULL AND Tags.20_Reset_sent IS NOT NULL AND Tags.21_PSS_Implemented IS NULL AND Tags.30_Autoupdate_sent IS NULL AND Tags.32_Upgraded IS NULL AND Tags.40_Configured IS NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"21_bootstrap\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"22_periodic\",\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00 IS NOT NULL AND Tags.01 IS NOT NULL AND Tags.10 IS NOT NULL AND Tags.20 IS NOT NULL AND Tags.21 IS NOT NULL AND Tags.22 IS NULL AND Tags.30 IS NULL AND Tags.31 IS NULL AND Tags.40 IS NULL AND Tags.Ready IS NULL\",\r\n    \"channel\": \"wive_new\",\r\n    \"weight\": 22,\r\n    \"events\": {\r\n        \"0 BOOTSTRAP\": true\r\n    },\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"22_periodic\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -500,7 +587,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/presets/21_bootstrap",
+									"raw": "http://{{URL}}:{{PORT}}/presets/22_periodic",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -508,7 +595,7 @@
 									"port": "{{PORT}}",
 									"path": [
 										"presets",
-										"21_bootstrap"
+										"22_periodic"
 									]
 								}
 							},
@@ -521,7 +608,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 30,\r\n        \"events\": {\r\n            \"0 BOOTSTRAP\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NOT NULL AND Tags.10_PPS_Uploaded IS NOT NULL AND Tags.20_Reset_sent IS NOT NULL AND Tags.21_PSS_Implemented IS NOT NULL AND Tags.30_Autoupdate_sent IS NULL AND Tags.32_Upgraded IS NULL AND Tags.40_Configured IS NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"30_upgrade\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"30_upgrade\",\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00 IS NOT NULL AND Tags.01 IS NOT NULL AND Tags.10 IS NOT NULL AND Tags.20 IS NOT NULL AND Tags.21 IS NOT NULL AND Tags.22 IS NOT NULL AND Tags.30 IS NULL AND Tags.31 IS NULL AND Tags.40 IS NULL AND Tags.Ready IS NULL\",\r\n    \"channel\": \"wive_new\",\r\n    \"events\": {\r\n        \"0 BOOTSTRAP\": true\r\n    },\r\n    \"weight\": 30,\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"30_upgrade\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -544,13 +631,13 @@
 							"response": []
 						},
 						{
-							"name": "31_upgrade",
+							"name": "31_bootstrap",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 30,\r\n        \"events\": {\r\n            \"1 BOOT\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NOT NULL AND Tags.10_PPS_Uploaded IS NOT NULL AND Tags.20_Reset_sent IS NOT NULL AND Tags.21_PSS_Implemented IS NOT NULL AND Tags.30_Autoupdate_sent IS NULL AND Tags.32_Upgraded IS NULL AND Tags.40_Configured IS NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"30_upgrade\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"31_bootstrap\",\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00 IS NOT NULL AND Tags.01 IS NOT NULL AND Tags.10 IS NOT NULL AND Tags.20 IS NOT NULL AND Tags.21 IS NOT NULL AND Tags.22 IS NOT NULL AND Tags.30 IS NOT NULL AND Tags.31 IS NULL AND Tags.40 IS NULL AND Tags.Ready IS NULL\",\r\n    \"channel\": \"wive_new\",\r\n    \"weight\": 31,\r\n    \"events\": {\r\n        \"2 PERIODIC\": true\r\n    },\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"31_bootstrap\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -558,7 +645,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/presets/31_upgrade",
+									"raw": "http://{{URL}}:{{PORT}}/presets/31_bootstrap",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -566,65 +653,7 @@
 									"port": "{{PORT}}",
 									"path": [
 										"presets",
-										"31_upgrade"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "32_bootstrap",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 32,\r\n        \"events\": {\r\n            \"7 TRANSFER COMPLETE\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NOT NULL AND Tags.10_PPS_Uploaded IS NOT NULL AND Tags.20_Reset_sent IS NOT NULL AND Tags.21_PSS_Implemented IS NOT NULL AND Tags.30_Autoupdate_sent IS NOT NULL AND Tags.32_Upgraded IS NULL AND Tags.40_Configured IS NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"32_bootstrap\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/presets/32_bootstrap",
-									"protocol": "http",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{PORT}}",
-									"path": [
-										"presets",
-										"32_bootstrap"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "33_bootstrap",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 32,\r\n        \"events\": {\r\n            \"1 BOOT\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NOT NULL AND Tags.10_PPS_Uploaded IS NOT NULL AND Tags.20_Reset_sent IS NOT NULL AND Tags.21_PSS_Implemented IS NOT NULL AND Tags.30_Autoupdate_sent IS NOT NULL AND Tags.32_Upgraded IS NULL AND Tags.40_Configured IS NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"32_bootstrap\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/presets/33_bootstrap",
-									"protocol": "http",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{PORT}}",
-									"path": [
-										"presets",
-										"33_bootstrap"
+										"31_bootstrap"
 									]
 								}
 							},
@@ -637,7 +666,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 40,\r\n        \"events\": {},\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NOT NULL AND Tags.10_PPS_Uploaded IS NOT NULL AND Tags.20_Reset_sent IS NOT NULL AND Tags.21_PSS_Implemented IS NOT NULL AND Tags.30_Autoupdate_sent IS NOT NULL AND Tags.32_Upgraded IS NULL AND Tags.40_Configured IS NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"40_config\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"40_config\",\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00 IS NOT NULL AND Tags.01 IS NOT NULL AND Tags.10 IS NOT NULL AND Tags.20 IS NOT NULL AND Tags.21 IS NOT NULL AND Tags.22 IS NOT NULL AND Tags.30 IS NOT NULL AND Tags.31 IS NOT NULL AND Tags.40 IS NULL AND Tags.Ready IS NULL\",\r\n    \"channel\": \"wive_new\",\r\n    \"weight\": 40,\r\n    \"events\": {\r\n        \"2 PERIODIC\": true\r\n    },\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"40_config\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -666,7 +695,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive_new\",\r\n        \"weight\": 41,\r\n        \"events\": {},\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00_New_device IS NOT NULL AND Tags.10_PPS_Uploaded IS NOT NULL AND Tags.20_Reset_sent IS NOT NULL AND Tags.21_PSS_Implemented IS NOT NULL AND Tags.30_Autoupdate_sent IS NOT NULL AND Tags.32_Upgraded IS NOT NULL AND Tags.40_Configured IS NOT NULL AND Tags.Ready IS NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"41_bootstrap\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"41_bootstrap\",\r\n    \"channel\": \"wive_new\",\r\n    \"events\": {\r\n        \"1 BOOT\": true\r\n    },\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.00 IS NOT NULL AND Tags.01 IS NOT NULL AND Tags.10 IS NOT NULL AND Tags.20 IS NOT NULL AND Tags.21 IS NOT NULL AND Tags.22 IS NOT NULL AND Tags.30 IS NOT NULL AND Tags.31 IS NOT NULL AND Tags.40 IS NOT NULL AND Tags.Ready IS NULL\",\r\n    \"weight\": 41,\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"41_bootstrap\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -689,13 +718,13 @@
 							"response": []
 						},
 						{
-							"name": "50_re_config",
+							"name": "50_reconfig",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive\",\r\n        \"weight\": 0,\r\n        \"events\": {},\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NOT NULL\",\r\n        \"schedule\": \"0 3 * * *\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"50_re_config\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"50_reconfig\",\r\n    \"channel\": \"wive\",\r\n    \"weight\": 0,\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NOT NULL\",\r\n    \"events\": {},\r\n    \"schedule\": \"3600 0 5 * * *\",\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"50_reconfig\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -703,7 +732,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/presets/50_re_config",
+									"raw": "http://{{URL}}:{{PORT}}/presets/50_reconfig",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -711,20 +740,20 @@
 									"port": "{{PORT}}",
 									"path": [
 										"presets",
-										"50_re_config"
+										"50_reconfig"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "51_re_config",
+							"name": "51_bootstrap",
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive\",\r\n        \"weight\": 10,\r\n        \"events\": {\r\n            \"1 BOOT\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NOT NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"50_re_config\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
+									"raw": "{\r\n    \"_id\": \"51_bootstrap\",\r\n    \"channel\": \"wive\",\r\n    \"weight\": 50,\r\n    \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NOT NULL\",\r\n    \"events\": {\r\n        \"2 PERIODIC\": true\r\n    },\r\n    \"schedule\": \"3600 5 5 * * *\",\r\n    \"configurations\": [\r\n        {\r\n            \"type\": \"provision\",\r\n            \"name\": \"51_bootstrap\",\r\n            \"args\": null\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -732,7 +761,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/presets/51_re_config",
+									"raw": "http://{{URL}}:{{PORT}}/presets/51_bootstrap",
 									"protocol": "http",
 									"host": [
 										"{{URL}}"
@@ -740,36 +769,7 @@
 									"port": "{{PORT}}",
 									"path": [
 										"presets",
-										"51_re_config"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "52_bootstrap",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n        \"channel\": \"wive\",\r\n        \"weight\": 100,\r\n        \"events\": {\r\n            \"2 PERIODIC\": true\r\n        },\r\n        \"precondition\": \"DeviceID.OUI = \\\"E0BB0C\\\" AND Tags.Ready IS NOT NULL\",\r\n        \"configurations\": [\r\n            {\r\n                \"type\": \"provision\",\r\n                \"name\": \"52_bootstrap\",\r\n                \"args\": null\r\n            }\r\n        ]\r\n    }",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://{{URL}}:{{PORT}}/presets/52_bootstrap",
-									"protocol": "http",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{PORT}}",
-									"path": [
-										"presets",
-										"52_bootstrap"
+										"51_bootstrap"
 									]
 								}
 							},
