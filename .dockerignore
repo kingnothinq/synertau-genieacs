@@ -1,0 +1,50 @@
+# Exclude directories created by IDE (e.g., PyCharm)
+.idea/
+
+# Exclude configuration files and virtual environments
+.vscode/
+.venv/
+env/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Exclude files related to testing and code coverage
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+*.pytest_cache/
+
+# Exclude build artifacts and related files
+*.log
+*.pot
+*.mo
+*.po
+*.pid
+*.swp
+*.swo
+*.sqlite3
+*.db
+*.sql
+
+# Exclude various temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.swp
+*.swo
+*.swn
+*.DS_Store
+Thumbs.db
+
+# Exclude files and directories generated during the build process
+build/
+dist/
+*.egg-info/
+*.eggs/
