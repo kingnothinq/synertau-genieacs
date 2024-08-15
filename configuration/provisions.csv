@@ -1,137 +1,212 @@
 "Name","Script"
-"00_bootstrap","// Clear cached data model to force a refresh
-const now = Date.now();
-clear(""Device"", now);
-clear(""InternetGatewayDevice"", now);
+"30_upgrade","// Upgrade firmware
 
-// Tag recently added devices
-declare(""Tags.00_New_device"", null, {value: true});
+log(""30_upgrade_start"");
 
-log(""00_bootstrap"");"
-"10_pss","// Upload PSS
-declare(""Downloads.[FileType:2 Web Content]"", {path: 1}, {path: 1}); 
-declare(""Downloads.[FileType:2 Web Content].FileName"", {value: 1}, {value: ""pss_settings.tar.bz2""});
-declare(""Downloads.[FileType:2 Web Content].Download"", {value: 1}, {value: Date.now()}); 
-
-// Tag devices with uploaded PSS
-declare(""Tags.10_PPS_Uploaded"", null, {value: true});
-
-log(""10_pss"");"
-"30_upgrade","// Update firmware
 declare(""Downloads.[FileType:1 Firmware Upgrade Image]"", {path: 1}, {path: 1}); 
 declare(""Downloads.[FileType:1 Firmware Upgrade Image].FileName"", {value: 1}, {value: ""autoupdate""}); 
 declare(""Downloads.[FileType:1 Firmware Upgrade Image].Download"", {value: 1}, {value: Date.now()}); 
 
-// Tag devices with uploaded Upgrade file
-declare(""Tags.30_Autoupdate_sent"", null, {value: true});
+// Tag
+declare(""Tags.30"", null, {value: true});
 
-log(""30_upgrade"");"
-"40_config","//Initial setup 
+log(""30_upgrade_stop"");"
+"40_config","// Configure CPE
+
+log(""40_config_start"");
+
 const time = Date.now();
 const mac = declare(""DeviceID.SerialNumber"",{value:1}).value[0]; 
-const wkey = mac; 
-const ssid = ""Homenet2"" + mac.substring(9); 
-const ssid5 = ""Homenet"" + mac.substring(9); 
-const bam = ""EAPAuthentication""; 
-const enc = ""AESEncryption""; 
 
-declare(""InternetGatewayDevice.ManagementServer.PeriodicInformTime"",{value:time},{value:bam}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.*.*"", {path: time}); 
+// Wi-Fi
+const auth = ""EAPAuthentication""; 
+const encr = ""AESEncryption""; 
+const encr_2 = ""AES""; 
+const mode = ""WPA3-Personal-Transition"";
+const isp = ""Synertau"";
+const psk = mac.replace(/:/g, '');
 
-//Refresh the node 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.BasicAuthenticationMode"",{value:time},{value:bam}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAAuthenticationMode"",{value:time},{value:bam}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAEncryptionModes"",{value:time},{value:enc}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iAuthenticationMode"",{value:time},{value:""PSKAuthentication""}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iEncryptionModes"",{value:time},{value:enc}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID"",{value:time},{value:ssid}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase"",{value:time},{value:wkey}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.BasicAuthenticationMode"",{value:time},{value:bam}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAAuthenticationMode"",{value:time},{value:bam}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAEncryptionModes"",{value:time},{value:enc}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iAuthenticationMode"",{value:time},{value:""PSKAuthentication""}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iEncryptionModes"",{value:time},{value:enc}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.SSID"",{value:time},{value:ssid5}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.KeyPassphrase"",{value:time},{value:wkey}); 
+configure_wlan_24();
+configure_wlan_5();
+
+// VPN
+configure_vpn();
+
+
+function configure_wlan_24() {
+  const ssid = isp + ""_24_"" + mac.substring(9).replace(/:/g, ''); 
+  
+  //declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iAuthenticationMode"",{value:time},{value:auth});
+  declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAAuthenticationMode"",{value:time},{value:auth}); 
+  //declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iEncryptionModes"",{value:time},{value:encr}); 
+  declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAEncryptionModes"",{value:time},{value:encr});
+  declare(""InternetGatewayDevice.WiFi.AccessPoint.1.Security.EncryptionMode"",{value:time},{value:encr_2});
+  //declare(""InternetGatewayDevice.WiFi.SSID.1.SSID"",{value:time},{value:ssid});
+  declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID"",{value:time},{value:ssid});
+  declare(""InternetGatewayDevice.WiFi.AccessPoint.1.Security.ModeEnabled"",{value:time},{value:mode});
+  declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase"",{value:time},{value:psk});
+}
+
+function configure_wlan_5() {
+  const ssid = isp + ""_5_"" + mac.substring(9).replace(/:/g, '');
+
+  //declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iAuthenticationMode"",{value:time},{value:auth}); 
+  declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAAuthenticationMode"",{value:time},{value:auth}); 
+  //declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iEncryptionModes"",{value:time},{value:encr}); 
+  declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAEncryptionModes"",{value:time},{value:encr}); 
+  //declare(""InternetGatewayDevice.WiFi.SSID.2.SSID"",{value:time},{value:ssid});
+  declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.SSID"",{value:time},{value:ssid});
+  declare(""InternetGatewayDevice.WiFi.AccessPoint.2.Security.ModeEnabled"",{value:time},{value:mode});
+  declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.KeyPassphrase"",{value:time},{value:psk});
+}
+
+function configure_vpn() {
+  const vpn = ""AUTO"";
+  const user = ""vpn_user"";
+  const pswd = ""vpn_password"";
+
+  declare(""InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Enable"",{value:time},{value:1});
+  declare(""InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.PPPAuthenticationProtocol"",{value:time},{value:vpn});
+  declare(""InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Username"",{value:time},{value:user});
+  declare(""InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Password"",{value:time},{value:pswd});
+}
 
 // Reboot device
-declare(""Reboot"", null, {value: Date.now() - (300 * 1000)});
+declare(""Reboot"", null, {value:time});
 
 // Tag configured devices
-declare(""Tags.40_Configured"", null, {value: true});
+declare(""Tags.40"", null, {value: true});
 
-log(""40_config"");"
-"21_bootstrap","// Clear cached data model to force a refresh
-const now = Date.now();
-clear(""Device"", now);
-clear(""InternetGatewayDevice"", now);
+log(""40_config_stop"");"
+"41_bootstrap","// Clear cached data model to force a refresh
 
-// Tag updated devices
-declare(""Tags.21_PSS_Implemented"", null, {value: true});
+log(""41_bootstrap_start"");
 
-log(""21_bootstrap"");"
-"20_reset","// Reset device
+// Periodic (Default)
+declare(""InternetGatewayDevice.ManagementServer.PeriodicInformTime"",{value:Date.now()},{value:3600});
+
+clear(""Device"", Date.now());
+clear(""InternetGatewayDevice"", Date.now());
+
+// Remove Tags
+declare(""Tags.00"", null, {value: false});
+declare(""Tags.01"", null, {value: false});
+declare(""Tags.10"", null, {value: false});
+declare(""Tags.20"", null, {value: false});
+declare(""Tags.21"", null, {value: false});
+declare(""Tags.22"", null, {value: false});
+declare(""Tags.30"", null, {value: false});
+declare(""Tags.31"", null, {value: false});
+declare(""Tags.40"", null, {value: false});
+
+// Add Tag
+declare(""Tags.Ready"", null, {value: true});
+
+log(""41_bootstrap_stop"");"
+"00_bootstrap","// Clear cached data model to force a refresh
+
+log(""00_bootstrap_start"");
+
+clear(""Device"", Date.now());
+clear(""InternetGatewayDevice"", Date.now());
+
+// Tag recently added devices
+declare(""Tags.00"", null, {value: true});
+
+log(""00_bootstrap_stop"");"
+"01_periodic","// Change Periodic connect interval
+
+log(""01_periodic_start"");
+
+declare(""InternetGatewayDevice.ManagementServer.PeriodicInformInterval"",{value:Date.now()},{value:60}); 
+
+// Tag
+declare(""Tags.01"", null, {value: true});
+
+log(""01_periodic_stop"");"
+"10_pss","// Upload PSS File to CPE
+
+log(""10_pss_start"");
+
+declare(""Downloads.[FileType:2 Web Content]"", {path: 1}, {path: 1}); 
+declare(""Downloads.[FileType:2 Web Content].FileName"", {value: 1}, {value: ""pss_settings.tar.bz2""}); 
+declare(""Downloads.[FileType:2 Web Content].Download"", {value: 1}, {value: Date.now()}); 
+
+// Tag
+declare(""Tags.10"", null, {value: true});
+
+log(""10_pss_stop"");"
+"20_bootstrap","// Clear cached data model to force a refresh
+
+log(""20_bootstrap_start"");
+
+clear(""Device"", Date.now());
+clear(""InternetGatewayDevice"", Date.now());
+
+// Tag recently added devices
+declare(""Tags.20"", null, {value: true});
+
+log(""20_bootstrap_stop"");"
+"21_reset","// Reset device
+
+log(""21_reset_start"");
+
 declare(""FactoryReset"", null, {value: Date.now()});
 
-// Tag reset devices
-declare(""Tags.20_Reset_sent"", null, {value: true});
+// Tag
+declare(""Tags.21"", null, {value: true});
 
-log(""20_reset"");"
-"41_bootstrap","// Clear cached data model to force a refresh
-const now = Date.now();
-clear(""Device"", now);
-clear(""InternetGatewayDevice"", now);
+log(""21_reset_stop"");"
+"22_periodic","// Change Periodic connect interval
 
-// Remove tags
-declare(""Tags.00_New_device"", null, {value: false});
-declare(""Tags.10_PPS_Uploaded"", null, {value: false});
-declare(""Tags.20_Reset_sent"", null, {value: false});
-declare(""Tags.21_PSS_Implemented"", null, {value: false});
-declare(""Tags.30_Autoupdate_sent"", null, {value: false});
-declare(""Tags.32_Upgraded"", null, {value: false});
-declare(""Tags.40_Configured"", null, {value: false});
+log(""22_periodic_start"");
 
-// Tag ready devices
-declare(""Tags.Ready"", null, {value: true});"
-"32_bootstrap","// Clear cached data model to force a refresh
-const now = Date.now();
-clear(""Device"", now);
-clear(""InternetGatewayDevice"", now);
+declare(""InternetGatewayDevice.ManagementServer.PeriodicInformInterval"",{value:Date.now()},{value:180}); 
 
-// Tag updated devices
-declare(""Tags.32_Upgraded"", null, {value: true});
+// Tag
+declare(""Tags.22"", null, {value: true});
 
-log(""32_bootstrap"");"
-"50_re_config","//Setup every 1 day 
+log(""22_periodic_stop"");"
+"31_bootstrap","// Clear cached data model to force a refresh
+
+log(""31_bootstrap_start"");
+
+clear(""Device"", Date.now());
+clear(""InternetGatewayDevice"", Date.now());
+
+// Tag recently added devices
+declare(""Tags.31"", null, {value: true});
+
+log(""31_bootstrap_stop"");"
+"51_bootstrap","// Clear cached data model to force a refresh
+
+log(""51_bootstrap_start"");
+
+clear(""Device"", Date.now());
+clear(""InternetGatewayDevice"", Date.now());
+
+log(""51_bootstrap_stop"");"
+"50_reconfig","// Configure CPE
+
+log(""50_reconfig_start"");
+
 const time = Date.now();
 const mac = declare(""DeviceID.SerialNumber"",{value:1}).value[0]; 
-const wkey = mac; 
-const ssid = ""Homenet2"" + mac.substring(9); 
-const ssid5 = ""Homenet"" + mac.substring(9); 
-const bam = ""EAPAuthentication""; 
-const enc = ""AESEncryption""; 
 
-declare(""InternetGatewayDevice.ManagementServer.PeriodicInformTime"",{value:time},{value:bam}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.*.*"", {path: time}); 
 
-//Refresh the node 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.BasicAuthenticationMode"",{value:time},{value:bam}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAAuthenticationMode"",{value:time},{value:bam}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPAEncryptionModes"",{value:time},{value:enc}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iAuthenticationMode"",{value:time},{value:""PSKAuthentication""}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.IEEE11iEncryptionModes"",{value:time},{value:enc}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID"",{value:time},{value:ssid}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.KeyPassphrase"",{value:time},{value:wkey}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.BasicAuthenticationMode"",{value:time},{value:bam}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAAuthenticationMode"",{value:time},{value:bam}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.WPAEncryptionModes"",{value:time},{value:enc}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iAuthenticationMode"",{value:time},{value:""PSKAuthentication""}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.IEEE11iEncryptionModes"",{value:time},{value:enc}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.SSID"",{value:time},{value:ssid5}); 
-declare(""InternetGatewayDevice.LANDevice.1.WLANConfiguration.11.KeyPassphrase"",{value:time},{value:wkey}); 
+// VPN
+configure_vpn();
 
-log(""50_config"");"
-"52_bootstrap","// Clear cached data model to force a refresh
-const now = Date.now();
-clear(""Device"", now);
-clear(""InternetGatewayDevice"", now);"
+
+function configure_vpn() {
+  const vpn = ""AUTO"";
+  const user = ""vpn_user"";
+  const pswd = ""vpn_password"";
+
+  declare(""InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Enable"",{value:time},{value:1});
+  declare(""InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.PPPAuthenticationProtocol"",{value:time},{value:vpn});
+  declare(""InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Username"",{value:time},{value:user});
+  declare(""InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Password"",{value:time},{value:pswd});
+}
+
+log(""51_reconfig_stop"");"
